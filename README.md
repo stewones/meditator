@@ -7,12 +7,14 @@ The theme used is a version based on [mediator](https://github.com/dirkfabisch/m
 
 1 - `git clone https://github.com/stpa-co/meditator my_meditator`
 
-2 - edit `url` param on `_config.yml` to `http://localhost:4000`
+2 - install Jekyll
 
-3 - install Jekyll and run `jekyll serve`
+3 - update `url` param on `_config.yml` to `http://localhost:4000`
 
-4 - edit... edit... edit...
+4 - run `jekyll serve` on terminal
 
-5 - commit and push
+5 - edit... edit... edit... commit
+
+6 - before push to production, be sure to change the `url` param correctly
 
 Feel free to open issues if you run into trouble or have suggestions. Pull Requests are always welcome.
