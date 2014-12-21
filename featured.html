@@ -1,0 +1,15 @@
+---
+layout: page
+title: Featured
+permalink: /featured/
+tags: [Featured]
+description: "Arquivo dos Featured posts"
+---
+<h2>{{ Featured posts | capitalize }}</h2>
+<ul class="post-list">
+{% for post in site.posts %}
+  {% if post.featured %}
+    <li><a href="{{ site.url }}{{ post.url }}">{{ post.title }}{% if post.subtitle %} (<div class="subtitle">{{ post.subtitle }}</div>){% endif %}<span class="entry-date"><time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: "%d %b, %Y"}}</time></a></li>
+  {% endif %}
+{% endfor %}
+</ul>

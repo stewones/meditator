@@ -2,101 +2,146 @@
 ---
 <!DOCTYPE html>
 <html>
-  {% include head.html %}
-  <body itemscope itemtype="http://schema.org/Article">
-    {% include header.html %}
-    <main class="content" role="main">
-      <article class="post">
+    {% include head.html %}
+    <body itemscope itemtype="http://schema.org/Article">
+        {% include analytics.html %}
+        {% include header.html %}
+        <main class="content" role=
+        "main">
+        <article class="post">
         {% if page.image %}
         <div class="article-image">
-          <div class="post-image-image" style="background-image: url({% if page.image %}{{ page.image }}{% endif %})">
-            Article Image
-          </div>
-          <div class="post-meta">
-            <h1 class="post-title">{{ page.title }}</h1>
-            <div class="cf post-meta-text">
-              <div class="author-image" style="background-image: url({{ site.author_image }})">Blog Logo</div>
-              <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">{{ site.author }}</h4>
-              on
-              <time datetime="{{ page.date | date: "%F %R" }}">{{ page.date | date_to_string }}</time>
-              <!-- , tagged on {{#foreach tags}}<span class="post-tag-{{slug}}">{{#if @first}}{{else}}, {{/if}}<a href="/tag/{{slug}}">{{name}}</a></span>{{/foreach}} -->
+            <div class="post-image-image" style="background-image: url({% if page.image %}{{ page.image }}{% endif %})">
+                article image
             </div>
-            <div style="text-align:center">
-              <a href="#topofpage" class="topofpage"><i class="fa fa-angle-down"></i></a>
+            <div class="post-meta">
+                <h1 class="post-title">{{ page.title }}</h1>
+                <h2 class="post-subtitle">{{ page.subtitle }}</h2>
+        
+                <div class="cf post-meta-text">
+                    <div class="author-image" style="background-image: url({{ site.author_image }})"></div>
+                    <h4 class="author-name">{{ site.author }}</h4>
+                    em
+                    <time itemprop="datePublished" datetime="{{ page.date | date: "%F %R" }}">{{ page.date | date_to_string }}</time>
+                    <!-- , tagged on {{#foreach tags}}<span class="post-tag-{{slug}}">{{#if @first}}{{else}}, {{/if}}<a href="/tag/{{slug}}">{{name}}</a></span>{{/foreach}} -->
+                </div>
+                <div style="text-align:center">
+                    <a href="#topofpage" class="topofpage"><i class="fa fa-angle-down"></i></a>
+                </div>
             </div>
-          </div>
         </div>
+        <script>
+                                        (function ($) {
+                                            "use strict";
+                                            $(document).ready(function(){
+                                                var $window = $(window),
+                                                    $image = $('.post-image-image');
+                                                $window.on('scroll', function() {
+                                                    var top = $window.scrollTop();
+                                                    if (top < 0 || top > 1500) { return; }
+                                                    $image
+                                                        .css('transform', 'translate3d(0px, '+top/3+'px, 0px)')
+                                                        .css('opacity', 1-Math.max(top/700, 0));
+                                                });
+                                                $window.trigger('scroll');
+                                                var height = $('.article-image').height();
+                                                    $('.post-content').css('padding-top', height + 'px');
+                                                $(function() {
+                                                    $('a[href*=#]:not([href=#])').click(function() {
+                                                    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+                                                        var target = $(this.hash);
+                                                        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+                                                        if (target.length) {
+                                                        $('html,body').animate({
+                                                            scrollTop: target.offset().top
+                                                        }, 500);
+                                                        return false;
+                                                        }
+                                                    }
+                                                    });
+                                                });
+                                            });
+                                        }(jQuery));
+        </script>
         {% else %}
         <div class="noarticleimage">
-          <div class="post-meta">
-            <h1 class="post-title">{{ page.title }}</h1>
-            <div class="cf post-meta-text">
-              <div class="author-image" style="background-image: url({{ site.author_image }})">Blog Logo</div>
-              <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">{{ page.author }}</h4>
-              on
-              <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_string }}</time>
-              <!-- , tagged on {{#foreach tags}}<span class="post-tag-{{slug}}">{{#if @first}}{{else}}, {{/if}}<a href="/tag/{{slug}}">{{name}}</a></span>{{/foreach}} -->
+            <div class="post-meta">
+                <h1 class="post-title">{{ page.title }}</h1>
+                <div class="cf post-meta-text">
+                    <div class="author-image" style="background-image: url({{ site.author_image }})">Blog Logo</div>
+                    <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">{{ page.author }}</h4>
+                    em
+                    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_string }}</time>
+                    <!-- , tagged on {{#foreach tags}}<span class="post-tag-{{slug}}">{{#if @first}}{{else}}, {{/if}}<a href="/tag/{{slug}}">{{name}}</a></span>{{/foreach}} -->
+                </div>
             </div>
-          </div>
         </div>
         <br>
         <br>
         <br>
         {% endif %}
         <section class="post-content">
-          <div class="post-reading">
-            <span class="post-reading-time"></span> read
-          </div>
-          <a name="topofpage"></a>
-          {{content}}
+            <div class="post-reading readtime">
+                {% if site.readtime %}
+                {% if site.wpm %}
+                {% assign readtime = content | strip_html | number_of_words | append: '.0'| split:'.' | first | divided_by:site.wpm %}
+                {% else %}
+                {% assign readtime = content | strip_html | number_of_words | append: '.0' | split:'.' | first | divided_by:180 %}
+                {% endif %}
+                {% endif %}
+                {% if site.readtime %}
+                <i class="fa fa-clock-o"></i>
+                {% if readtime > 1 and readtime < 1.5 %}1 minuto de leitura{% endif %}
+                {% if readtime > 1.5 %}<span class="time">{{ readtime }}</span> minutos de leitura{% endif %}
+                {% if readtime <= 1 %}Menos de 1 minuto de leitura{% endif %}
+                {% endif %}
+            </div>
+            <a name="topofpage"></a>
+            <div style="display: none;" itemprop="wordCount">{% assign wordCount = content | strip_html | number_of_words %}{{ wordCount }}</div>
+            <div itemprop="articleBody">
+                {{content}}
+            </div
         </section>
         <footer class="post-footer">
-          <section class="share">
-            {% for social in site.social %}
-              {% if social.share_url != null %}
-                <a class="icon-{{ social.icon }}" href="{{ social.share_url }}{{ social.share_title }}{{page.title | cgi_escape}}{{ social.share_link }}{{site.url}}{{page.id}}"
-                  onclick="window.open(this.href, '{{ social.icon }}-share', 'width=550,height=255');return false;">
-                <i class="fa fa-{{ social.icon }}"></i><span class="hidden">{{ social.icon }}</span>
-                </a>
-              {% endif %}
-            {% endfor %}
-          </section>
+            {% include sharer.html %}
         </footer>
+        {% if page.comments %}
+        {% include disqus/comments.html %}
+        {% endif %}
         <div class="bottom-teaser cf">
-          <div class="isLeft">
-            <h5 class="index-headline featured"><span>Written by</span></h5>
-            <section class="author">
-              <div class="author-image" style="background-image: url({{site.author_image}})">Blog Logo</div>
-              <h4>{{ site.author }}</h4>
-              <p class="bio">{{author.bio}}</p>
-              <hr>
-              <p class="published">Published <time datetime="{{ page.date | date: "%F %R" }}">{{ page.date | date_to_string }}</time></p>
-            </section>
-          </div>
-          {{/post}}
-          <div class="isRight">
-            <h5 class="index-headline featured"><span>Supported by</span></h5>
-            <footer class="site-footer">
-              <section class="poweredby">Proudly published with <a href="http://jekyllrb.com"> Jekyll</a></section>
-              <a class="subscribe" href="{{ "/feed.xml" | prepend: site.baseurl }}"> <span class="tooltip"> <i class="fa fa-rss"></i> You should subscribe to my feed.</span></a>
-              <div class="inner">
-                <section class="copyright">All content copyright <a href="{{@blog.url}}/">{{site.author}}</a> &copy; 2014<br>All rights reserved.</section>
-              </div>
-            </footer>
-          </div>
+            <div class="isLeft">
+                <h5 class="index-headline featured"><span>Escrito por</span></h5>
+                <section class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                    <div class="author-image" style="background-image: url({{site.author_image}})"><img itemprop="image" src="{{ site.author_image }}" style="display:none;"></div>
+                    <h4 itemprop="name">{{ site.author }}</h4>
+                    <p class="bio">{{site.author_bio}}</p>
+                    <hr>
+                    <p class="published">Publicado em <time datetime="{{ page.date | date: "%F %R" }}">{{ page.date | date_to_string }}</time>
+                    </p>
+                    {% include sharer.html %}
+                </section>
+            </div>
+            {{/post}}
+            <div class="isRight">
+                <h5 class="index-headline featured"><span>Leia também</span></h5>
+                <div class="related">
+                    {% for post in site.related_posts limit:1 %}
+                    <article class="post">
+                    <div class="article-item">
+                        <header class="post-header">
+                            <h4><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h4>
+                        </header>
+                        <section class="post-excerpt">
+                            <p>{{ post.subtitle }} - {{ post.content | strip_html | truncatewords: 20 }}</p>
+                        </section>
+                    </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-      </article>
-    </main>
-    <div class="bottom-closer">
-      <div class="background-closer-image" {%if site.cover %} style="background-image: url({{ site.cover }})"{% endif %}>
-        Image
-      </div>
-      <div class="inner">
-        <h1 class="blog-title">{{ site.title }}</h1>
-        <h2 class="blog-description">{{ site.description }}</h2>
-        <a href="/" class="btn">Back to Overview</a>
-      </div>
-    </div>
-    {% include javascripts.html %}
-  </body>
+        </article>
+        </main>
+        {% include bottom_closer.html %}
+    </body>
 </html>
