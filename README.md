@@ -15,6 +15,6 @@ The theme used is a version based on [mediator](https://github.com/dirkfabisch/m
 
 5 - edit... edit... edit... commit
 
-6 - before push to production, be sure to change the `url` param correctly
+6 - before push for production, be sure to correctly change the `url` param 
 
 Feel free to open issues if you run into trouble or have suggestions. Pull Requests are always welcome.
