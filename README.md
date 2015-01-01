@@ -15,6 +15,7 @@ This theme is a custom version by [@stewones](https://twitter.com/stewones) base
 
 5 - edit... edit... edit... commit
 
-*Note** before push for production, be sure to correctly change the `url` param 
+
+**Note** before push for production, be sure to correctly change the `url` param 
 
 Feel free to open issues if you run into trouble or have suggestions. Pull Requests are always welcome.
